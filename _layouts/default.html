@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% if page.title != 'index' %}
+  {% assign posts=site.posts | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+  {% if posts.size == 0 %}
+  {% assign posts=site.pages | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+  {% endif %}
+  {% if posts.size > 1 %}
+  {% for post in posts %}
+  <link rel="alternate" hreflang="{{post.lang}}" href="{{ site.base-url }}{{ post.url }}" />
+  {% endfor %}
+  {% endif %}
+  {% endif %}
+  <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{ site.description }}</title>
+
+  {% include meta.html %}
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}"
+    href="{{ site.baseurl }}/feed.xml" />
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+
+  <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+</head>
+
+<body>
+  <div class="wrapper-masthead">
+    <div class="container">
+      <header class="masthead clearfix">
+        <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
+
+        <div class="site-info">
+          <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
+          <p class="site-description">{{ site.description }}</p>
+        </div>
+
+        <nav>
+
+          {% if page.title == 'index' %}
+          <a href="/" class="{{ post.lang }}" title="View in {{site.data.lang.en}}"> {{
+            site.data.languages['en'].icon }}
+          </a>
+          |
+          <a href="/es" class="ms-0 {{ post.lang }}" title="View in {{site.data.lang.es}}"> {{
+            site.data.languages['es'].icon }}
+          </a>
+          {% endif %}
+
+
+
+          {% if page.title != 'index' %}
+          {% assign posts=site.posts | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+          {% if posts.size == 0 %}
+          {% assign posts=site.pages | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+          {% endif %}
+          {% if posts.size > 1 %}
+
+          <a href="{{ site.base-url }}{{ posts[0]['url'] }}" class="{{ posts[0]['lang'] }}"
+            title="View in {{posts[0]['lang']}}">
+
+            {% assign enLang = posts[0]['lang'] %}
+            {{site.data.languages[enLang].icon}}
+          </a>
+          |
+          <a href="{{ site.base-url }}{{ posts[1]['url'] }}" class="ms-0 {{ posts[1]['lang'] }}"
+            title="View in {{posts[1]['lang']}}">
+            {% assign esLang = posts[1]['lang'] %}
+            {{site.data.languages[esLang].icon}}
+          </a>
+          {% endif %}
+          {% endif %}
+
+          <a href="{{ site.baseurl }}/">Blog</a>
+          <a href="{{ site.baseurl }}/about">About</a>
+        </nav>
+      </header>
+    </div>
+  </div>
+
+  <div id="main" role="main" class="container">
+    {{ content }}
+  </div>
+
+  <div class="wrapper-footer">
+    <div class="container">
+      <footer class="footer">
+        {% include svg-icons.html %}
+      </footer>
+    </div>
+  </div>
+
+  {% include analytics.html %}
+
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
